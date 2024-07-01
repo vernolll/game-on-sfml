@@ -1,6 +1,5 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
-#include <iostream>
 
 using namespace sf;
 
@@ -183,17 +182,11 @@ int main()
 				p.dy = -0.35;
 				p.onGround = false;
 				jump.play();
-				//while ((Keyboard::isKeyPressed(Keyboard::Up)) || (Keyboard::isKeyPressed(Keyboard::W)) || (Keyboard::isKeyPressed(Keyboard::Space))) {}
+				
 			}
 		}
 		
-		//sound1.stop();
 		
-		//while ((Keyboard::isKeyPressed(Keyboard::Right)) || (Keyboard::isKeyPressed(Keyboard::D))) {  } 
-		//while ((Keyboard::isKeyPressed(Keyboard::Left)) || (Keyboard::isKeyPressed(Keyboard::A))) { walk.play(); }
-		//while ((Keyboard::isKeyPressed(Keyboard::Up)) || (Keyboard::isKeyPressed(Keyboard::W)) || (Keyboard::isKeyPressed(Keyboard::Space))) { walk.play(); }
-
-
 		p.update(time);
 
 		if (p.rect.left > 300) offsetX = p.rect.left - 300;
