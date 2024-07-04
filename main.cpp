@@ -1,5 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+#include <iostream>
 
 using namespace sf;
 
@@ -97,41 +98,67 @@ public:
 	}
 };
 
-int main()
-{
-	RenderWindow window(VideoMode(600, 400), "cute cat");
+int menu(RenderWindow& window);
 
+int setting(RenderWindow& window)
+{
+	window.clear();
+	Texture Background;
+	Background.loadFromFile("images/background4.png");
+	Sprite background(Background);
+	
+
+	std::cout << "hi";
+
+	window.draw(background);
+	window.display();
+	window.clear();
+	
+	bool isSet = true;
+	while (isSet == true) {
+		if ((Keyboard::isKeyPressed(Keyboard::Space)))
+		{
+			isSet = false;  return 300, menu(window);
+		}
+	}
+	// здесь долно храниться число, говорящее о громкости звука
+	// также здесь должны быть картинки и анимации регуляции звука
+	// не забыть организовать выход из настроек в меню
+	//sound.setVolume(50.f);
+
+}
+
+
+void game(RenderWindow& window)
+{
 	Texture backtexture;
 	backtexture.loadFromFile("images/background1.png");
 	Sprite back1;
 	back1.setTexture(backtexture);
-	back1.setTextureRect(IntRect(0, 0, 640, 480));
+	back1.setTextureRect(IntRect(0, 0, 600, 400));
 	back1.setPosition(0, 0);
-	
+
 	Music music;
 	if (!music.openFromFile("music and sounds/main.ogg"))
-		return -1; // error
+		return;
 	music.play();
 	music.setLoop(true);
 
 	SoundBuffer buffer_jump;
 	if (!buffer_jump.loadFromFile("music and sounds/jump.wav"))
-		return -1;
+		return;
 	Sound jump;
 	jump.setBuffer(buffer_jump);
-	
+
 	SoundBuffer buffer_walk;
-	buffer_walk.loadFromFile("music and sounds/ww.wav");
+	buffer_walk.loadFromFile("music and sounds/walk.wav");
 	Sound walk;
 	walk.setBuffer(buffer_walk);
 
 
 	Texture t;
-
 	t.loadFromFile("images/hero.png");
-
 	float currentFrame = 0;
-
 	PLAYER p(t);
 
 	Clock clock;
@@ -153,13 +180,10 @@ int main()
 			if (event.type == Event::Closed)
 				window.close();
 		}
-		
+
 		if ((Keyboard::isKeyPressed(Keyboard::Left)) || (Keyboard::isKeyPressed(Keyboard::A)))
 		{
 			p.dx = -0.1;
-		}
-		while ((Keyboard::isKeyPressed(Keyboard::Left)) || (Keyboard::isKeyPressed(Keyboard::A)))
-		{
 			walk.play();
 		}
 
@@ -168,13 +192,10 @@ int main()
 		{
 			p.dx = 0.1;
 			walk.play();
-		} 
+		}
 
-		
 
-		//jumping
-		
-		
+		//jumpingg
 		if ((Keyboard::isKeyPressed(Keyboard::Up)) || (Keyboard::isKeyPressed(Keyboard::W)) || (Keyboard::isKeyPressed(Keyboard::Space)))
 		{
 			if (p.onGround)
@@ -182,11 +203,10 @@ int main()
 				p.dy = -0.35;
 				p.onGround = false;
 				jump.play();
-				
 			}
 		}
-		
-		
+
+
 		p.update(time);
 
 		if (p.rect.left > 300) offsetX = p.rect.left - 300;
@@ -212,10 +232,74 @@ int main()
 		window.draw(p.sprite);
 		window.display();
 	}
+}
 
-	return 0;
+int menu(RenderWindow& window)
+{
+	Music music;
+	if (!music.openFromFile("music and sounds/menu.ogg"))
+		return 1;
+	music.play();
+	music.setLoop(true);
+
+	Texture button1, button2, button3;
+	button1.loadFromFile("images/start.png");
+	button2.loadFromFile("images/settings.png");
+	button3.loadFromFile("images/exit.png");
+	Sprite start(button1), settings(button2), exit(button3);
+	start.setPosition(120, 30);
+	settings.setPosition(90, 150);
+	exit.setPosition(160, 265);
+
+	Texture MenuBackground;
+	MenuBackground.loadFromFile("images/menu.png");
+	Sprite background(MenuBackground);
+
+	bool isMenu = -1;
+	int menuNum = 0;
+
+	background.setTextureRect(IntRect(0, 0, 600, 400));
+	
+	window.draw(background);
+	window.draw(start);
+	window.draw(settings);
+	window.draw(exit);
+	window.display();
+	window.clear();
+
+	while (isMenu)
+	{
+		Event event;
+		while (window.pollEvent(event))
+		{
+			if (event.type == Event::Closed)
+				window.close();
+		}
+
+		start.setColor(Color::White);
+		settings.setColor(Color::White);
+		exit.setColor(Color::White);
+
+		Vector2i mousePos = Mouse::getPosition(window);
+		if(start.getGlobalBounds().contains(mousePos.x, mousePos.y)){ start.setColor(Color::Blue); menuNum = 1; }
+		if (settings.getGlobalBounds().contains(mousePos.x, mousePos.y)) { settings.setColor(Color::Blue); menuNum = 2; }
+		if (exit.getGlobalBounds().contains(mousePos.x, mousePos.y)) { exit.setColor(Color::Blue); menuNum = 3; }
+
+		std::cout << menuNum;
+		
+		if(menuNum == 1 && (Mouse::isButtonPressed(Mouse::Left))) { music.stop();  isMenu = false; game(window); }
+		if (menuNum == 2 && (Mouse::isButtonPressed(Mouse::Left))) { music.stop(); window.clear(); isMenu = false; setting(window); }
+		if (menuNum == 3 && (Mouse::isButtonPressed(Mouse::Left))) { window.close(); isMenu = false; }
+	}
 }
 
 
 
+int main()
+{
+	RenderWindow window(VideoMode(600, 400), "cute cat");
 
+	menu(window);
+
+	return 0;
+}
