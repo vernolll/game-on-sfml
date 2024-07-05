@@ -121,6 +121,9 @@ int setting(RenderWindow& window)
 			isSet = false;  return 300, menu(window);
 		}
 	}
+
+	// ораганзовать перевод на русский
+
 	// здесь долно храниться число, говорящее о громкости звука
 	// также здесь должны быть картинки и анимации регуляции звука
 	// не забыть организовать выход из настроек в меню
@@ -131,6 +134,8 @@ int setting(RenderWindow& window)
 
 void game(RenderWindow& window)
 {
+	window.setMouseCursorVisible(false); //отключаем видимость курсора
+	
 	Texture backtexture;
 	backtexture.loadFromFile("images/background1.png");
 	Sprite back1;
@@ -167,6 +172,12 @@ void game(RenderWindow& window)
 
 	while (window.isOpen())
 	{
+		if ((Keyboard::isKeyPressed(Keyboard::Escape)))
+		{
+			// сделать внтриигровое меню
+			window.close();
+		}
+
 		float time = clock.getElapsedTime().asMicroseconds();
 		clock.restart();
 
@@ -242,33 +253,49 @@ int menu(RenderWindow& window)
 	music.play();
 	music.setLoop(true);
 
-	Texture button1, button2, button3;
-	button1.loadFromFile("images/start.png");
-	button2.loadFromFile("images/settings.png");
-	button3.loadFromFile("images/exit.png");
-	Sprite start(button1), settings(button2), exit(button3);
-	start.setPosition(120, 30);
-	settings.setPosition(90, 150);
-	exit.setPosition(160, 265);
+	Font font;
+	if (!font.loadFromFile("font/HomeVideo-Bold.otf")) return 5;
 
+	Text start;
+	start.setFont(font);
+	start.setString("start");
+	start.setCharacterSize(75);
+	start.setFillColor(Color::White);
+	start.setPosition(300 - start.getGlobalBounds().width / 2, start.getGlobalBounds().height);
+
+	Text settings;
+	settings.setFont(font);
+	settings.setString("settings");
+	settings.setCharacterSize(75);
+	settings.setFillColor(Color::White);
+	settings.setPosition(300 - settings.getGlobalBounds().width / 2, 200 - settings.getGlobalBounds().height / 2);
+
+	Text exit;
+	exit.setFont(font);
+	exit.setString("exit");
+	exit.setCharacterSize(75);
+	exit.setFillColor(Color::White);
+	exit.setPosition(300 - exit.getGlobalBounds().width / 2, 300 - exit.getGlobalBounds().height / 2);
+
+	// надо чтобы экран появлялся плавно из темноты
 	Texture MenuBackground;
 	MenuBackground.loadFromFile("images/menu.png");
 	Sprite background(MenuBackground);
-
-	bool isMenu = -1;
-	int menuNum = 0;
-
 	background.setTextureRect(IntRect(0, 0, 600, 400));
-	
+
 	window.draw(background);
 	window.draw(start);
 	window.draw(settings);
 	window.draw(exit);
 	window.display();
-	window.clear();
+
+	bool isMenu = true;
+	int menuNum = 0;
 
 	while (isMenu)
 	{
+
+		// криво работает крестик
 		Event event;
 		while (window.pollEvent(event))
 		{
@@ -276,24 +303,22 @@ int menu(RenderWindow& window)
 				window.close();
 		}
 
-		start.setColor(Color::White);
-		settings.setColor(Color::White);
-		exit.setColor(Color::White);
-
+		// почему-то не меняется цвета
 		Vector2i mousePos = Mouse::getPosition(window);
-		if(start.getGlobalBounds().contains(mousePos.x, mousePos.y)){ start.setColor(Color::Blue); menuNum = 1; }
-		if (settings.getGlobalBounds().contains(mousePos.x, mousePos.y)) { settings.setColor(Color::Blue); menuNum = 2; }
-		if (exit.getGlobalBounds().contains(mousePos.x, mousePos.y)) { exit.setColor(Color::Blue); menuNum = 3; }
+		if (start.getGlobalBounds().contains(mousePos.x, mousePos.y)) { start.setFillColor(Color::Blue); menuNum = 1; }
+		else { start.setFillColor(Color::White); }
+		if (settings.getGlobalBounds().contains(mousePos.x, mousePos.y)) { settings.setFillColor(Color::Blue); menuNum = 2; }
+		else { settings.setFillColor(Color::White); }
+		if (exit.getGlobalBounds().contains(mousePos.x, mousePos.y)) { exit.setFillColor(Color::Blue); menuNum = 3; }
+		else { exit.setFillColor(Color::White); }
 
 		std::cout << menuNum;
-		
-		if(menuNum == 1 && (Mouse::isButtonPressed(Mouse::Left))) { music.stop();  isMenu = false; game(window); }
+
+		if (menuNum == 1 && (Mouse::isButtonPressed(Mouse::Left))) { music.stop(); isMenu = false; game(window); }
 		if (menuNum == 2 && (Mouse::isButtonPressed(Mouse::Left))) { music.stop(); window.clear(); isMenu = false; setting(window); }
 		if (menuNum == 3 && (Mouse::isButtonPressed(Mouse::Left))) { window.close(); isMenu = false; }
 	}
 }
-
-
 
 int main()
 {
