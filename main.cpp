@@ -11,7 +11,7 @@ float offsetX = 0, offsetY = 0;
 const int H = 12;
 const int W = 40;
 
-
+//map
 String TileMap[H] = {
 
 "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
@@ -29,6 +29,7 @@ String TileMap[H] = {
 
 };
 
+//main character
 class PLAYER {
 
 public:
@@ -74,7 +75,7 @@ public:
 	}
 
 
-
+	// collision
 	void Collision(int dir)
 	{
 		for (int i = rect.top / 32; i < (rect.top + rect.height) / 32; i++)
@@ -100,27 +101,64 @@ public:
 
 int menu(RenderWindow& window);
 
-int setting(RenderWindow& window)
+// settings from main menu
+int setting(RenderWindow& window, Music& music)
 {
+	music.play();
+	music.setLoop(true);
+
 	window.clear();
 	Texture Background;
 	Background.loadFromFile("images/background4.png");
 	Sprite background(Background);
+
+	RectangleShape rect(Vector2f(500, 300));
+	rect.setFillColor(Color(169, 169, 169));
+	rect.setOutlineThickness(5);
+	rect.setOutlineColor(sf::Color(105, 105, 105));
+	rect.setPosition(50, 50);
+
+	RectangleShape line(Vector2f(400, 5));
+	line.setFillColor(Color::White);
+	line.setOutlineThickness(2);
+	line.setOutlineColor(sf::Color(105, 105, 105));
+	line.setPosition(100, 100);
+
+	int x = 500;
+
+	CircleShape circle(10);
+	circle.setFillColor(Color(255, 218, 185));
+	circle.setOutlineThickness(2);
+	circle.setOutlineColor(Color(210, 180, 140));
+	circle.setPosition(x, 95);
 	
-
-	std::cout << "hi";
-
-	window.draw(background);
-	window.display();
-	window.clear();
 	
 	bool isSet = true;
-	while (isSet == true) {
+	int volume = 100, distance = 80;
+	while (isSet == true) 
+	{
+		if (((Keyboard::isKeyPressed(Keyboard::Right)) || (Keyboard::isKeyPressed(Keyboard::D))) && (volume != 100))
+		{
+			volume += 20; x += 80; circle.setPosition(x, 95);
+			
+		}
+		if (((Keyboard::isKeyPressed(Keyboard::Left)) || (Keyboard::isKeyPressed(Keyboard::A))) && (volume != 0))
+		{
+			volume -= 20; x -= 80; circle.setPosition(x, 95);
+		}
 		if ((Keyboard::isKeyPressed(Keyboard::Space)))
 		{
-			isSet = false;  return 300, menu(window);
+			music.stop(); isSet = false;  return volume, menu(window);
 		}
+		window.clear(); 
+
+		window.draw(background);
+		window.draw(rect);
+		window.draw(line);
+		window.draw(circle);
+		window.display();
 	}
+
 
 	// ораганзовать перевод на русский
 
@@ -206,7 +244,7 @@ void game(RenderWindow& window)
 		}
 
 
-		//jumpingg
+		//jumping
 		if ((Keyboard::isKeyPressed(Keyboard::Up)) || (Keyboard::isKeyPressed(Keyboard::W)) || (Keyboard::isKeyPressed(Keyboard::Space)))
 		{
 			if (p.onGround)
@@ -253,6 +291,12 @@ int menu(RenderWindow& window)
 	music.play();
 	music.setLoop(true);
 
+	SoundBuffer button;
+	if (!button.loadFromFile("music/button.wav"))
+		return 10;
+	Sound click;
+	click.setBuffer(button);
+
 	Font font;
 	if (!font.loadFromFile("font/HomeVideo-Bold.otf")) return 5;
 
@@ -260,21 +304,21 @@ int menu(RenderWindow& window)
 	start.setFont(font);
 	start.setString("start");
 	start.setCharacterSize(75);
-	start.setFillColor(Color::White);
+	
 	start.setPosition(300 - start.getGlobalBounds().width / 2, start.getGlobalBounds().height);
 
 	Text settings;
 	settings.setFont(font);
 	settings.setString("settings");
 	settings.setCharacterSize(75);
-	settings.setFillColor(Color::White);
+
 	settings.setPosition(300 - settings.getGlobalBounds().width / 2, 200 - settings.getGlobalBounds().height / 2);
 
 	Text exit;
 	exit.setFont(font);
 	exit.setString("exit");
 	exit.setCharacterSize(75);
-	exit.setFillColor(Color::White);
+
 	exit.setPosition(300 - exit.getGlobalBounds().width / 2, 300 - exit.getGlobalBounds().height / 2);
 
 	// надо чтобы экран появлялся плавно из темноты
@@ -294,6 +338,9 @@ int menu(RenderWindow& window)
 
 	while (isMenu)
 	{
+		start.setFillColor(Color::White);
+		settings.setFillColor(Color::White);
+		exit.setFillColor(Color::White);
 
 		// криво работает крестик
 		Event event;
@@ -314,9 +361,9 @@ int menu(RenderWindow& window)
 
 		std::cout << menuNum;
 
-		if (menuNum == 1 && (Mouse::isButtonPressed(Mouse::Left))) { music.stop(); isMenu = false; game(window); }
-		if (menuNum == 2 && (Mouse::isButtonPressed(Mouse::Left))) { music.stop(); window.clear(); isMenu = false; setting(window); }
-		if (menuNum == 3 && (Mouse::isButtonPressed(Mouse::Left))) { window.close(); isMenu = false; }
+		if (menuNum == 1 && (Mouse::isButtonPressed(Mouse::Left))) { click.play(); music.stop(); isMenu = false; game(window); }
+		if (menuNum == 2 && (Mouse::isButtonPressed(Mouse::Left))) { click.play(); music.stop(); window.clear(); isMenu = false; setting(window, music); }
+		if (menuNum == 3 && (Mouse::isButtonPressed(Mouse::Left))) { click.play(); window.close(); isMenu = false; }
 	}
 }
 
