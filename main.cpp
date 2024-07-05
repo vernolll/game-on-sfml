@@ -139,19 +139,19 @@ void game(RenderWindow& window)
 	back1.setPosition(0, 0);
 
 	Music music;
-	if (!music.openFromFile("music and sounds/main.ogg"))
+	if (!music.openFromFile("music/main.ogg"))
 		return;
 	music.play();
 	music.setLoop(true);
 
 	SoundBuffer buffer_jump;
-	if (!buffer_jump.loadFromFile("music and sounds/jump.wav"))
+	if (!buffer_jump.loadFromFile("music/jump.wav"))
 		return;
 	Sound jump;
 	jump.setBuffer(buffer_jump);
 
 	SoundBuffer buffer_walk;
-	buffer_walk.loadFromFile("music and sounds/walk.wav");
+	buffer_walk.loadFromFile("music/walk.wav");
 	Sound walk;
 	walk.setBuffer(buffer_walk);
 
@@ -237,7 +237,7 @@ void game(RenderWindow& window)
 int menu(RenderWindow& window)
 {
 	Music music;
-	if (!music.openFromFile("music and sounds/menu.ogg"))
+	if (!music.openFromFile("music/menu.ogg"))
 		return 1;
 	music.play();
 	music.setLoop(true);
