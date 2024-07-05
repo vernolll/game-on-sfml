@@ -156,7 +156,6 @@ int setting(RenderWindow& window, Music& music)
 	sliderButton.setPosition(x, 95);
 	
 	bool isSet = true;
-	int volume = 100;
 	bool isDragging = false;
 	while (isSet == true) 
 	{
@@ -178,6 +177,7 @@ int setting(RenderWindow& window, Music& music)
 				isDragging = false;
 			}
 
+			
 			if (isDragging && event.type == Event::MouseMoved)
 			{
 				float newX = event.mouseMove.x - sliderButton.getSize().x / 2;
@@ -186,13 +186,20 @@ int setting(RenderWindow& window, Music& music)
 				if (newX + sliderButton.getSize().x > slider.getPosition().x + slider.getSize().x)
 					newX = slider.getPosition().x + slider.getSize().x - sliderButton.getSize().x;
 				sliderButton.setPosition(newX, sliderButton.getPosition().y);
+				
+				
 			}
+			
 
-			if ((Keyboard::isKeyPressed(Keyboard::Space)))
-			{
-				music.stop(); return menu(window), 300;
-			}
 		}
+		int v = sliderButton.getPosition().x / 5;
+		music.setVolume(v);
+
+		bool exit = false;
+		Vector2i mousePos = Mouse::getPosition(window);
+		if (esc.getGlobalBounds().contains(mousePos.x, mousePos.y)) { exit = true; }
+		if (exit && (Mouse::isButtonPressed(Mouse::Left))) { music.stop(); isSet = false; return menu(window), v; }
+
 		window.draw(background);
 		window.draw(rect);
 		window.draw(slider);
@@ -401,10 +408,9 @@ int menu(RenderWindow& window)
 		if (exit.getGlobalBounds().contains(mousePos.x, mousePos.y)) { exit.setFillColor(Color::Blue); menuNum = 3; }
 		else { exit.setFillColor(Color::White); }
 
-		std::cout << menuNum;
 
 		if (menuNum == 1 && (Mouse::isButtonPressed(Mouse::Left))) { click.play(); music.stop(); isMenu = false; game(window); }
-		if (menuNum == 2 && (Mouse::isButtonPressed(Mouse::Left))) { click.play(); music.stop(); window.clear(); isMenu = false; setting(window, music); }
+		if (menuNum == 2 && (Mouse::isButtonPressed(Mouse::Left))) { click.play(); music.pause(); window.clear(); isMenu = false; std::cout << "sets: " << setting(window, music); }
 		if (menuNum == 3 && (Mouse::isButtonPressed(Mouse::Left))) { click.play(); window.close(); isMenu = false; }
 	}
 }
