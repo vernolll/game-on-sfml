@@ -107,58 +107,101 @@ int setting(RenderWindow& window, Music& music)
 	music.play();
 	music.setLoop(true);
 
+	Font font;
+	if (!font.loadFromFile("font/HomeVideo-Regular.otf")) return 5;
+
+	Text volume_txt;
+	volume_txt.setFont(font);
+	volume_txt.setString("Volume");
+	volume_txt.setCharacterSize(20);
+	volume_txt.setFillColor(Color(200, 200, 200));
+	volume_txt.setPosition(300 - volume_txt.getGlobalBounds().width / 2, 70 - volume_txt.getGlobalBounds().height / 2);
+
+	Text leng;
+	leng.setFont(font);
+	leng.setString("Language");
+	leng.setCharacterSize(20);
+	leng.setFillColor(Color(200, 200, 200));
+	leng.setPosition(300 - leng.getGlobalBounds().width / 2, 150 - leng.getGlobalBounds().height / 2);
+
 	window.clear();
 	Texture Background;
 	Background.loadFromFile("images/background4.png");
 	Sprite background(Background);
 
+	RectangleShape esc(Vector2f(15, 15));
+	esc.setFillColor(Color::White);
+	esc.setOutlineThickness(2);
+	esc.setOutlineColor(Color(105, 105, 105));
+	esc.setPosition(520, 60);
+
 	RectangleShape rect(Vector2f(500, 300));
 	rect.setFillColor(Color(169, 169, 169));
 	rect.setOutlineThickness(5);
-	rect.setOutlineColor(sf::Color(105, 105, 105));
+	rect.setOutlineColor(Color(105, 105, 105));
 	rect.setPosition(50, 50);
 
-	RectangleShape line(Vector2f(400, 5));
-	line.setFillColor(Color::White);
-	line.setOutlineThickness(2);
-	line.setOutlineColor(sf::Color(105, 105, 105));
-	line.setPosition(100, 100);
+	RectangleShape slider(Vector2f(400, 5));
+	slider.setFillColor(Color::White);
+	slider.setOutlineThickness(2);
+	slider.setOutlineColor(Color(105, 105, 105));
+	slider.setPosition(100, 100);
 
 	int x = 500;
 
-	CircleShape circle(10);
-	circle.setFillColor(Color(255, 218, 185));
-	circle.setOutlineThickness(2);
-	circle.setOutlineColor(Color(210, 180, 140));
-	circle.setPosition(x, 95);
-	
+	RectangleShape sliderButton(Vector2f(10, 10));
+	sliderButton.setFillColor(Color(255, 218, 185));
+	sliderButton.setOutlineThickness(2);
+	sliderButton.setOutlineColor(Color(210, 180, 140));
+	sliderButton.setPosition(x, 95);
 	
 	bool isSet = true;
-	int volume = 100, distance = 80;
+	int volume = 100;
+	bool isDragging = false;
 	while (isSet == true) 
 	{
-		if (((Keyboard::isKeyPressed(Keyboard::Right)) || (Keyboard::isKeyPressed(Keyboard::D))) && (volume != 100))
+		Event event;
+		while (window.pollEvent(event))
 		{
-			volume += 20; x += 80; circle.setPosition(x, 95);
-			
-		}
-		if (((Keyboard::isKeyPressed(Keyboard::Left)) || (Keyboard::isKeyPressed(Keyboard::A))) && (volume != 0))
-		{
-			volume -= 20; x -= 80; circle.setPosition(x, 95);
-		}
-		if ((Keyboard::isKeyPressed(Keyboard::Space)))
-		{
-			music.stop(); isSet = false;  return volume, menu(window);
-		}
-		window.clear(); 
+			if (event.type == sf::Event::Closed)
+				window.close();
+			if (event.type == sf::Event::MouseButtonPressed)
+			{
+				if (event.mouseButton.button == Mouse::Left &&
+					sliderButton.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y))
+				{
+					isDragging = true;
+				}
+			}
+			if (event.type == Event::MouseButtonReleased)
+			{
+				isDragging = false;
+			}
 
+			if (isDragging && event.type == Event::MouseMoved)
+			{
+				float newX = event.mouseMove.x - sliderButton.getSize().x / 2;
+				if (newX < slider.getPosition().x)
+					newX = slider.getPosition().x;
+				if (newX + sliderButton.getSize().x > slider.getPosition().x + slider.getSize().x)
+					newX = slider.getPosition().x + slider.getSize().x - sliderButton.getSize().x;
+				sliderButton.setPosition(newX, sliderButton.getPosition().y);
+			}
+
+			if ((Keyboard::isKeyPressed(Keyboard::Space)))
+			{
+				music.stop(); return menu(window), 300;
+			}
+		}
 		window.draw(background);
 		window.draw(rect);
-		window.draw(line);
-		window.draw(circle);
+		window.draw(slider);
+		window.draw(sliderButton);
+		window.draw(volume_txt);
+		window.draw(leng);
+		window.draw(esc);
 		window.display();
 	}
-
 
 	// ораганзовать перевод на русский
 
@@ -166,7 +209,6 @@ int setting(RenderWindow& window, Music& music)
 	// также здесь должны быть картинки и анимации регуляции звука
 	// не забыть организовать выход из настроек в меню
 	//sound.setVolume(50.f);
-
 }
 
 
