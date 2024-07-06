@@ -1,6 +1,8 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <iostream>
+#include <fstream>
+#include <string>
 
 using namespace sf;
 
@@ -104,8 +106,20 @@ int menu(RenderWindow& window);
 // settings from main menu
 int setting(RenderWindow& window, Music& music)
 {
+	//регуляция громкости
+	int vl;
+	std::ifstream file("volume.txt");
+	if (file.is_open()) { file >> vl; file.close(); }
+	music.setVolume(vl);
+
 	music.play();
 	music.setLoop(true);
+
+	SoundBuffer button;
+	if (!button.loadFromFile("music/button.wav"))
+		return 10;
+	Sound click;
+	click.setBuffer(button);
 
 	Font font;
 	if (!font.loadFromFile("font/HomeVideo-Regular.otf")) return 5;
@@ -147,13 +161,39 @@ int setting(RenderWindow& window, Music& music)
 	slider.setOutlineColor(Color(105, 105, 105));
 	slider.setPosition(100, 100);
 
-	int x = 500;
+	int x = vl * 5;
 
 	RectangleShape sliderButton(Vector2f(10, 10));
 	sliderButton.setFillColor(Color(255, 218, 185));
 	sliderButton.setOutlineThickness(2);
 	sliderButton.setOutlineColor(Color(210, 180, 140));
 	sliderButton.setPosition(x, 95);
+
+	RectangleShape rect1(Vector2f(150, 20));
+	rect1.setFillColor(Color(169, 169, 169));
+	rect1.setOutlineThickness(5);
+	rect1.setOutlineColor(Color(128, 128, 128));
+	rect1.setPosition(225, 200);
+
+	RectangleShape rect2(Vector2f(150, 20));
+	rect2.setFillColor(Color(169, 169, 169));
+	rect2.setOutlineThickness(5);
+	rect2.setOutlineColor(Color(128, 128, 128));
+	rect2.setPosition(225, 250);
+
+	Text eng;
+	eng.setFont(font);
+	eng.setString("English");
+	eng.setCharacterSize(15);
+	eng.setFillColor(Color(220, 220, 220));
+	eng.setPosition(300 - eng.getGlobalBounds().width / 2, 205 - eng.getGlobalBounds().height / 2);
+
+	Text rus;
+	rus.setFont(font);
+	rus.setString("Russian");
+	rus.setCharacterSize(15);
+	rus.setFillColor(Color(220, 220, 220));
+	rus.setPosition(300 - rus.getGlobalBounds().width / 2, 255 - rus.getGlobalBounds().height / 2);
 	
 	bool isSet = true;
 	bool isDragging = false;
@@ -169,7 +209,7 @@ int setting(RenderWindow& window, Music& music)
 				if (event.mouseButton.button == Mouse::Left &&
 					sliderButton.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y))
 				{
-					isDragging = true;
+					isDragging = true; click.play();
 				}
 			}
 			if (event.type == Event::MouseButtonReleased)
@@ -186,19 +226,22 @@ int setting(RenderWindow& window, Music& music)
 				if (newX + sliderButton.getSize().x > slider.getPosition().x + slider.getSize().x)
 					newX = slider.getPosition().x + slider.getSize().x - sliderButton.getSize().x;
 				sliderButton.setPosition(newX, sliderButton.getPosition().y);
-				
-				
 			}
 			
-
 		}
+
 		int v = sliderButton.getPosition().x / 5;
 		music.setVolume(v);
+
+		std::ofstream out;
+		out.open("volume.txt");
+		if (out.is_open()) { out << v; }
+		out.close();
 
 		bool exit = false;
 		Vector2i mousePos = Mouse::getPosition(window);
 		if (esc.getGlobalBounds().contains(mousePos.x, mousePos.y)) { exit = true; }
-		if (exit && (Mouse::isButtonPressed(Mouse::Left))) { music.stop(); isSet = false; return menu(window), v; }
+		if (exit && (Mouse::isButtonPressed(Mouse::Left))) { click.play();music.pause(); isSet = false; return menu(window), v; }
 
 		window.draw(background);
 		window.draw(rect);
@@ -207,22 +250,21 @@ int setting(RenderWindow& window, Music& music)
 		window.draw(volume_txt);
 		window.draw(leng);
 		window.draw(esc);
+		window.draw(rect1);
+		window.draw(rect2);
+		window.draw(eng);
+		window.draw(rus);
 		window.display();
 	}
 
 	// ораганзовать перевод на русский
-
-	// здесь долно храниться число, говорящее о громкости звука
-	// также здесь должны быть картинки и анимации регуляции звука
-	// не забыть организовать выход из настроек в меню
-	//sound.setVolume(50.f);
 }
 
 
 void game(RenderWindow& window)
 {
 	window.setMouseCursorVisible(false); //отключаем видимость курсора
-	
+
 	Texture backtexture;
 	backtexture.loadFromFile("images/background1.png");
 	Sprite back1;
@@ -235,6 +277,13 @@ void game(RenderWindow& window)
 		return;
 	music.play();
 	music.setLoop(true);
+
+
+	int vl;
+	std::ifstream file("volume.txt");
+	if (file.is_open()) { file >> vl; file.close(); }
+	std::cout << vl;
+	music.setVolume(vl);
 
 	SoundBuffer buffer_jump;
 	if (!buffer_jump.loadFromFile("music/jump.wav"))
@@ -256,6 +305,7 @@ void game(RenderWindow& window)
 	Clock clock;
 
 	RectangleShape rectangle(Vector2f(32, 32));
+
 
 	while (window.isOpen())
 	{
@@ -312,6 +362,7 @@ void game(RenderWindow& window)
 
 		window.clear();
 
+
 		window.draw(back1);
 
 		for (int i = 0; i < H; i++)
@@ -339,6 +390,11 @@ int menu(RenderWindow& window)
 		return 1;
 	music.play();
 	music.setLoop(true);
+
+	int v;
+	std::ifstream file("volume.txt");
+	if (file.is_open()) { file >> v; file.close(); }
+	music.setVolume(v);
 
 	SoundBuffer button;
 	if (!button.loadFromFile("music/button.wav"))
@@ -376,6 +432,7 @@ int menu(RenderWindow& window)
 	Sprite background(MenuBackground);
 	background.setTextureRect(IntRect(0, 0, 600, 400));
 
+
 	window.draw(background);
 	window.draw(start);
 	window.draw(settings);
@@ -410,7 +467,7 @@ int menu(RenderWindow& window)
 
 
 		if (menuNum == 1 && (Mouse::isButtonPressed(Mouse::Left))) { click.play(); music.stop(); isMenu = false; game(window); }
-		if (menuNum == 2 && (Mouse::isButtonPressed(Mouse::Left))) { click.play(); music.pause(); window.clear(); isMenu = false; std::cout << "sets: " << setting(window, music); }
+		if (menuNum == 2 && (Mouse::isButtonPressed(Mouse::Left))) { click.play(); music.pause(); window.clear(); isMenu = false; setting(window, music); }
 		if (menuNum == 3 && (Mouse::isButtonPressed(Mouse::Left))) { click.play(); window.close(); isMenu = false; }
 	}
 }
