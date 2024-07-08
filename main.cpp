@@ -1,8 +1,10 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+#include <SFML/System.hpp>
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <atomic>
 
 using namespace sf;
 
@@ -103,6 +105,19 @@ public:
 
 int menu(RenderWindow& window);
 void game(RenderWindow& window);
+
+void play_music(Sound walk)
+{
+    walk.play();
+
+    while ((Keyboard::isKeyPressed(Keyboard::Right)) || (Keyboard::isKeyPressed(Keyboard::D)))
+    {
+        // Keep playing the sound as long as the space bar is pressed
+    }
+
+    walk.pause();
+}
+
 
 // settings from main menu
 int setting(RenderWindow& window, Music& music)
@@ -448,7 +463,7 @@ void game(RenderWindow& window)
 	jump.setBuffer(buffer_jump);
 
 	SoundBuffer buffer_walk;
-	buffer_walk.loadFromFile("music/walk.wav");
+	buffer_walk.loadFromFile("music/walking.wav");
 	Sound walk;
 	walk.setBuffer(buffer_walk);
 
@@ -462,6 +477,7 @@ void game(RenderWindow& window)
 
 	RectangleShape rectangle(Vector2f(32, 32));
 
+	Thread thread(&play_music, walk);
 
 	while (window.isOpen())
 	{
@@ -480,19 +496,28 @@ void game(RenderWindow& window)
 				window.close();
 		}
 
+		bool is_moving = false;
 		if ((Keyboard::isKeyPressed(Keyboard::Left)) || (Keyboard::isKeyPressed(Keyboard::A)))
 		{
+			is_moving = true;
 			p.dx = -0.1;
-			walk.play();
 		}
 
 
 		if ((Keyboard::isKeyPressed(Keyboard::Right)) || (Keyboard::isKeyPressed(Keyboard::D)))
 		{
+			is_moving = true;
 			p.dx = 0.1;
-			walk.play();
 		}
 
+		if (is_moving) {
+			if (walk.getStatus() != sf::Sound::Playing) {
+				walk.play();
+			}
+		}
+		else {
+			walk.stop();
+		}
 
 		//jumping
 		if ((Keyboard::isKeyPressed(Keyboard::Up)) || (Keyboard::isKeyPressed(Keyboard::W)) || (Keyboard::isKeyPressed(Keyboard::Space)))
@@ -643,3 +668,39 @@ int main()
 
 	return 0;
 }
+
+//
+//#include <SFML/Audio.hpp>
+//#include <SFML/Window.hpp>
+//
+//using namespace sf;
+//
+//void music(Sound walk)
+//{
+//    walk.play();
+//
+//    while (Keyboard::isKeyPressed(Keyboard::Space))
+//    {
+//        // Keep playing the sound as long as the space bar is pressed
+//    }
+//
+//    walk.pause();
+//}
+//
+//int main()
+//{
+//    SoundBuffer bufferwalk;
+//    bufferwalk.loadFromFile("music/walking.wav");
+//    Sound walk;
+//    walk.setBuffer(bufferwalk);
+//
+//    while (true)
+//    {
+//        if (Keyboard::isKeyPressed(Keyboard::Space))
+//        {
+//            music(walk);
+//        }
+//    }
+//
+//    return 0;
+//}
