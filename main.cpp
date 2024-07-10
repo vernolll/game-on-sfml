@@ -8,7 +8,7 @@
 using namespace sf;
 
 
-//float offsetX = 0, offsetY = 0;
+float offsetX = 0, offsetY = 0;
 
 
 //const int H = 12;
@@ -470,7 +470,7 @@ void game(RenderWindow& window)
 
 
 	Texture t;
-	t.loadFromFile("images/hero1.png");
+	t.loadFromFile("images/hero2.png");
 	float currentFrame = 0;
 	PLAYER p(t);
 
@@ -478,7 +478,17 @@ void game(RenderWindow& window)
 
 	RectangleShape rectangle(Vector2f(32, 32));
 
-	Thread thread(&play_music, walk);
+	Texture earth;
+	earth.loadFromFile("images/earth.png");
+
+	Texture  earth_edge;
+	earth_edge.loadFromFile("images/earth_edge.png");
+
+	Texture	box;
+	box.loadFromFile("images/box.png");
+
+	Texture  earth_edge1;
+	earth_edge1.loadFromFile("images/earth_edge1.png");
 
 	while (window.isOpen())
 	{
@@ -539,15 +549,20 @@ void game(RenderWindow& window)
 
 		window.clear();
 
-
 		window.draw(back1);
 		
 		for (int i = 0; i < H; i++)
 			for (int j = 0; j < W; j++)
 			{
-				if (TileMap[i][j] == 'B') rectangle.setFillColor(Color::White);
+				if (TileMap[i][j] == 'B') rectangle.setTexture(&earth);
 
-				if (TileMap[i][j] == '0')  rectangle.setFillColor(Color::Red);
+				if (TileMap[i][j] == 'E') rectangle.setTexture(&earth_edge);
+
+				if (TileMap[i][j] == '0')  rectangle.setTexture(&earth_edge);
+
+				if (TileMap[i][j] == 'X')  rectangle.setTexture(&box);
+
+				if (TileMap[i][j] == 'e')  rectangle.setTexture(&earth_edge1);
 
 				if (TileMap[i][j] == ' ') continue;
 
@@ -562,9 +577,6 @@ void game(RenderWindow& window)
 		if ((Keyboard::isKeyPressed(Keyboard::Escape)))
 		{
 			vl = internal_settings(window, music);
-			// сделать внтриигровое меню
-			
-			//window.close();
 		}
 		window.display();
 	}

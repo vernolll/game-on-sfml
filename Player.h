@@ -4,7 +4,7 @@
 
 using namespace sf;
 
-float offsetX = 0, offsetY = 0;
+extern float offsetX, offsetY;
 
 class PLAYER {
 
@@ -44,7 +44,8 @@ public:
 		if (dx > 0) sprite.setTextureRect(IntRect(63 * int(currentFrame), 196, 60, 60));
 		if (dx < 0) sprite.setTextureRect(IntRect(69 * int(currentFrame), 130, 60, 60));
 		//что-то сделать с анимацией прыжка
-		if (dy > 0) sprite.setTextureRect(IntRect(60 * int(currentFrame), 60, 60, 60));
+		if (dy > 0 && dx > 0) sprite.setTextureRect(IntRect(60 * int(currentFrame), 60, 60, 60));
+		if (dy > 0 && dx < 0) sprite.setTextureRect(IntRect(60 * int(currentFrame), 0, 60, 60));
 
 
 		sprite.setPosition(rect.left - offsetX, rect.top - offsetY);
@@ -59,7 +60,7 @@ public:
 		for (int i = rect.top / 32; i < (rect.top + rect.height) / 32; i++)
 			for (int j = rect.left / 32; j < (rect.left + rect.width) / 32; j++)
 			{
-				if (TileMap[i][j] == 'B')
+				if ((TileMap[i][j] == 'B') || (TileMap[i][j] == 'E') || (TileMap[i][j] == 'X') || (TileMap[i][j] == 'e'))
 				{
 					if ((dx > 0) && (dir == 0)) rect.left = j * 32 - rect.width;
 					if ((dx < 0) && (dir == 0)) rect.left = j * 32 + 32;
