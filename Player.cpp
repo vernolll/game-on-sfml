@@ -23,12 +23,10 @@ void PLAYER::update(float time) {
     currentFrame += 0.005 * time;
     if (currentFrame > 3) currentFrame -= 3;
 
-    if (dx > 0 && onGround) sprite.setTextureRect(IntRect(63 * int(currentFrame), 196, 60, 60));
-    if (dx < 0 && onGround) sprite.setTextureRect(IntRect(69 * int(currentFrame), 130, 60, 60));
-    // Something to do with jump animation
-    // if (dy > 0 && dx > 0 && !onGround) sprite.setTextureRect(IntRect(60 * int(currentFrame), 60, 60, 60));
-    if (((Keyboard::isKeyPressed(Keyboard::Up)) || (Keyboard::isKeyPressed(Keyboard::W)) || (Keyboard::isKeyPressed(Keyboard::Space))) && ((Keyboard::isKeyPressed(Keyboard::Left)) || (Keyboard::isKeyPressed(Keyboard::A)))) sprite.setTextureRect(IntRect(60 * int(currentFrame), 0, 60, 60));
-    if (((Keyboard::isKeyPressed(Keyboard::Up)) || (Keyboard::isKeyPressed(Keyboard::W)) || (Keyboard::isKeyPressed(Keyboard::Space))) && ((Keyboard::isKeyPressed(Keyboard::Right)) || (Keyboard::isKeyPressed(Keyboard::D)))) sprite.setTextureRect(IntRect(60 * int(currentFrame), 60, 60, 60));
+    if (dx > 0) sprite.setTextureRect(IntRect(63 * int(currentFrame), 196, 60, 60));
+    if (dx < 0) sprite.setTextureRect(IntRect(69 * int(currentFrame), 130, 60, 60));
+    if (((Keyboard::isKeyPressed(Keyboard::Up)) || (Keyboard::isKeyPressed(Keyboard::W)) || (Keyboard::isKeyPressed(Keyboard::Space))) && ((Keyboard::isKeyPressed(Keyboard::Left)) || (Keyboard::isKeyPressed(Keyboard::A)))) sprite.setTextureRect(IntRect(65 * int(currentFrame), 0, 60, 60));
+    if (((Keyboard::isKeyPressed(Keyboard::Up)) || (Keyboard::isKeyPressed(Keyboard::W)) || (Keyboard::isKeyPressed(Keyboard::Space))) && ((Keyboard::isKeyPressed(Keyboard::Right)) || (Keyboard::isKeyPressed(Keyboard::D)))) sprite.setTextureRect(IntRect(65 * int(currentFrame), 60, 60, 60));
 
     sprite.setPosition(rect.left - offsetX, rect.top - offsetY);
 

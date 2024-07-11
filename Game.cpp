@@ -57,6 +57,12 @@ void game(RenderWindow& window)
 	Texture  earth_edge1;
 	earth_edge1.loadFromFile("images/earth_edge1.png");
 
+	Texture character;
+	character.loadFromFile("images/marshroom.png");
+	Sprite ch;
+	ch.setTexture(character);
+	ch.setTextureRect(IntRect(0, 0, 60, 60));
+
 	while (window.isOpen())
 	{
 
@@ -108,6 +114,7 @@ void game(RenderWindow& window)
 			}
 		}
 
+		
 
 		p.update(time);
 
@@ -137,6 +144,8 @@ void game(RenderWindow& window)
 				window.draw(rectangle);
 			}
 
+		ch.setPosition(700 - offsetX, 292 - offsetY);
+		window.draw(ch);
 		window.draw(p.sprite);
 
 
