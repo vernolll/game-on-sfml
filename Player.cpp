@@ -36,7 +36,7 @@ void PLAYER::update(float time) {
 void PLAYER::Collision(int dir) {
     for (int i = rect.top / 32; i < (rect.top + rect.height) / 32; i++) {
         for (int j = rect.left / 32; j < (rect.left + rect.width) / 32; j++) {
-            if ((TileMap[i][j] == 'B') || (TileMap[i][j] == 'E') || (TileMap[i][j] == 'X') || (TileMap[i][j] == 'e')) {
+            if ((TileMap[i][j] == 'B') || (TileMap[i][j] == 'E') || (TileMap[i][j] == 'X') || (TileMap[i][j] == 'e') || (TileMap[i][j] == 'L')){
                 if ((dx > 0) && (dir == 0)) rect.left = j * 32 - rect.width;
                 if ((dx < 0) && (dir == 0)) rect.left = j * 32 + 32;
                 if ((dy > 0) && (dir == 1)) {

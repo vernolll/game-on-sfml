@@ -7,4 +7,4 @@
 
 using namespace sf;
 
-int internal_settings(RenderWindow& window, Music& music);
+int internal_settings(RenderWindow& window);

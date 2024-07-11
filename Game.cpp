@@ -13,7 +13,7 @@ void game(RenderWindow& window)
 	back1.setPosition(0, 0);
 
 	Music music;
-	if (!music.openFromFile("music/main.ogg"))
+	if (!music.openFromFile("music/main_theme.ogg"))
 		return;
 	music.play();
 	music.setLoop(true);
@@ -57,11 +57,29 @@ void game(RenderWindow& window)
 	Texture  earth_edge1;
 	earth_edge1.loadFromFile("images/earth_edge1.png");
 
+	Texture  apple;
+	apple.loadFromFile("images/apple.png");
+
 	Texture character;
 	character.loadFromFile("images/marshroom.png");
 	Sprite ch;
 	ch.setTexture(character);
 	ch.setTextureRect(IntRect(0, 0, 60, 60));
+
+	Texture cloud;
+	cloud.loadFromFile("images/talking1.png");
+	Sprite cl;
+	cl.setTexture(cloud);
+	cl.setTextureRect(IntRect(0, 0, 60, 60));
+
+	Texture cloud1;
+	cloud1.loadFromFile("images/talking.png");
+	Sprite cl1;
+	cl1.setTexture(cloud1);
+	cl1.setTextureRect(IntRect(0, 0, 60, 60));
+
+	Texture  nothing;
+	nothing.loadFromFile("images/nothing.png");
 
 	while (window.isOpen())
 	{
@@ -114,8 +132,6 @@ void game(RenderWindow& window)
 			}
 		}
 
-		
-
 		p.update(time);
 
 		if (p.rect.left > 300) offsetX = p.rect.left - 300;
@@ -125,21 +141,18 @@ void game(RenderWindow& window)
 
 		window.draw(back1);
 
+
 		for (int i = 0; i < H; i++)
 			for (int j = 0; j < W; j++)
 			{
 				if (TileMap[i][j] == 'B') rectangle.setTexture(&earth);
-
+				if (TileMap[i][j] == 'L') rectangle.setTexture(&nothing);
 				if (TileMap[i][j] == 'E') rectangle.setTexture(&earth_edge);
-
-				if (TileMap[i][j] == '0')  rectangle.setTexture(&earth_edge);
-
+				if (TileMap[i][j] == '0')  rectangle.setTexture(&apple);
 				if (TileMap[i][j] == 'X')  rectangle.setTexture(&box);
-
 				if (TileMap[i][j] == 'e')  rectangle.setTexture(&earth_edge1);
-
 				if (TileMap[i][j] == ' ') continue;
-
+				
 				rectangle.setPosition(j * 32 - offsetX, i * 32 - offsetY);
 				window.draw(rectangle);
 			}
@@ -148,11 +161,16 @@ void game(RenderWindow& window)
 		window.draw(ch);
 		window.draw(p.sprite);
 
+		if (p.sprite.getGlobalBounds().intersects(ch.getGlobalBounds()))
+		{
+			cl.setPosition(650 - offsetX, 280 - offsetY);
+			window.draw(cl);
+		}
 
 		bool is_menu = false;
 		if ((Keyboard::isKeyPressed(Keyboard::Escape)))
 		{
-			vl = internal_settings(window, music);
+			music.pause(); vl = internal_settings(window);
 		}
 		window.display();
 	}

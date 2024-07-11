@@ -1,7 +1,13 @@
 #include "Internal_menu.h"
 
-int internal_settings(RenderWindow& window, Music& music)
+int internal_settings(RenderWindow& window)
 {
+	Music music;
+	if (!music.openFromFile("music/main.ogg"))
+		return 1;
+	music.play();
+	music.setLoop(true);
+
 	window.setMouseCursorVisible(true);
 	//регул€ци€ громкости
 	int vl;
