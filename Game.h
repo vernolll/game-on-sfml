@@ -8,4 +8,6 @@
 
 using namespace sf;
 
+extern bool pick_up;
+
 void game(RenderWindow& window);

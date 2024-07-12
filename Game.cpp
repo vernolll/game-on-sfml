@@ -81,6 +81,24 @@ void game(RenderWindow& window)
 	Texture  nothing;
 	nothing.loadFromFile("images/nothing.png");
 
+	Texture tree1;
+	tree1.loadFromFile("images/tree2.png");
+	Sprite tr1;
+	tr1.setTexture(tree1);
+	tr1.setTextureRect(IntRect(0, 0, 65, 153));
+
+	Texture tree2;
+	tree2.loadFromFile("images/tree6.png");
+	Sprite tr2;
+	tr2.setTexture(tree2);
+	tr2.setTextureRect(IntRect(0, 0, 96, 117));
+
+	Texture tree3;
+	tree3.loadFromFile("images/tree5.png");
+	Sprite tr3;
+	tr3.setTexture(tree3);
+	tr3.setTextureRect(IntRect(0, 0, 111, 128));
+
 	while (window.isOpen())
 	{
 
@@ -113,7 +131,7 @@ void game(RenderWindow& window)
 		}
 
 		if (is_moving) {
-			if (walk.getStatus() != sf::Sound::Playing) {
+			if (walk.getStatus() != Sound::Playing) {
 				walk.play();
 			}
 		}
@@ -141,6 +159,12 @@ void game(RenderWindow& window)
 
 		window.draw(back1);
 
+		tr1.setPosition(200 - offsetX, 210 - offsetY);
+		window.draw(tr1);
+		tr2.setPosition(600 - offsetX, 120 - offsetY);
+		window.draw(tr2);
+		tr3.setPosition(900 - offsetX, 245 - offsetY);
+		window.draw(tr3);
 
 		for (int i = 0; i < H; i++)
 			for (int j = 0; j < W; j++)
@@ -161,10 +185,17 @@ void game(RenderWindow& window)
 		window.draw(ch);
 		window.draw(p.sprite);
 
-		if (p.sprite.getGlobalBounds().intersects(ch.getGlobalBounds()))
+
+		if ((p.sprite.getGlobalBounds().intersects(ch.getGlobalBounds())) && (pick_up == false))
 		{
 			cl.setPosition(650 - offsetX, 280 - offsetY);
 			window.draw(cl);
+		}
+
+		if ((p.sprite.getGlobalBounds().intersects(ch.getGlobalBounds())) && (pick_up == true))
+		{
+			cl1.setPosition(650 - offsetX, 280 - offsetY);
+			window.draw(cl1);
 		}
 
 		bool is_menu = false;

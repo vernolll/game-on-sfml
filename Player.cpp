@@ -51,7 +51,7 @@ void PLAYER::Collision(int dir) {
             }
 
             if (TileMap[i][j] == '0') {
-                TileMap[i][j] = ' ';
+                TileMap[i][j] = ' '; pick_up = true;
             }
         }
     }

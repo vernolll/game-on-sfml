@@ -8,6 +8,7 @@ using namespace sf;
 
 
 float offsetX = 0, offsetY = 0;
+bool pick_up = false;
 
 
 int main()

@@ -4,6 +4,7 @@
 using namespace sf;
 
 extern float offsetX, offsetY;
+extern bool pick_up;
 
 class PLAYER {
 public:
