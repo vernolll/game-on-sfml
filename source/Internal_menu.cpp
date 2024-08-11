@@ -1,15 +1,18 @@
 #include "Internal_menu.h"
 
+// In-game menu
+
 int internal_settings(RenderWindow& window)
 {
 	Music music;
-	if (!music.openFromFile("music/main.ogg"))
+	if (!music.openFromFile("resource/music/main.ogg"))
 		return 1;
 	music.play();
 	music.setLoop(true);
 
 	window.setMouseCursorVisible(true);
-	//регул€ци€ громкости
+
+	// setting volume
 	int vl;
 	std::ifstream file("volume.txt");
 	if (file.is_open()) { file >> vl; file.close(); }
@@ -18,8 +21,10 @@ int internal_settings(RenderWindow& window)
 	music.play();
 	music.setLoop(true);
 
+
+	// loading content
 	SoundBuffer button;
-	if (!button.loadFromFile("music/button.wav"))
+	if (!button.loadFromFile("resource/music/button.wav"))
 		return 10;
 	Sound click;
 	click.setBuffer(button);
@@ -57,7 +62,7 @@ int internal_settings(RenderWindow& window)
 
 	window.clear();
 	Texture Background;
-	Background.loadFromFile("images/main_background.png");
+	Background.loadFromFile("resource/images/main_background.png");
 	Sprite background(Background);
 
 	RectangleShape esc(Vector2f(15, 15));
@@ -92,8 +97,8 @@ int internal_settings(RenderWindow& window)
 	main_menu.setOutlineColor(Color(128, 128, 128));
 	main_menu.setPosition(400, 300);
 
-	//организовать выход в главное меню
 
+	// menu mechanics
 	bool isSet = true;
 	bool isDragging = false;
 	while (isSet == true)

@@ -1,21 +1,22 @@
 #include "Menu.h"
 #include "Game.h"
 
+
 int menu(RenderWindow& window)
 {
 	Music music;
-	if (!music.openFromFile("music/menu.ogg"))
+	if (!music.openFromFile("resource/music/menu.ogg"))
 		return 1;
 	music.play();
 	music.setLoop(true);
 
-	int v;
+	int v = 0;
 	std::ifstream file("volume.txt");
 	if (file.is_open()) { file >> v; file.close(); }
 	music.setVolume(v);
 
 	SoundBuffer button;
-	if (!button.loadFromFile("music/button.wav"))
+	if (!button.loadFromFile("resource/music/button.wav"))
 		return 10;
 	Sound click;
 	click.setBuffer(button);
@@ -46,7 +47,7 @@ int menu(RenderWindow& window)
 
 	// надо чтобы экран по€вл€лс€ плавно из темноты
 	Texture MenuBackground;
-	MenuBackground.loadFromFile("images/menu.png");
+	MenuBackground.loadFromFile("resource/images/menu.png");
 	Sprite background(MenuBackground);
 	background.setTextureRect(IntRect(0, 0, 600, 400));
 
@@ -65,8 +66,8 @@ int menu(RenderWindow& window)
 		start.setFillColor(Color::White);
 		settings.setFillColor(Color::White);
 		exit.setFillColor(Color::White);
+		
 
-		// криво работает крестик
 		Event event;
 		while (window.pollEvent(event))
 		{
@@ -74,7 +75,7 @@ int menu(RenderWindow& window)
 				window.close();
 		}
 
-		// почему-то не мен€етс€ цвета
+		
 		Vector2i mousePos = Mouse::getPosition(window);
 		if (start.getGlobalBounds().contains(mousePos.x, mousePos.y)) { start.setFillColor(Color::Blue); menuNum = 1; }
 		else { start.setFillColor(Color::White); }

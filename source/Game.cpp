@@ -1,43 +1,43 @@
 #include "Game.h"
 #include "Internal_menu.h"
 
+// The game itself is implemented here
+
 void game(RenderWindow& window)
 {
-	window.setMouseCursorVisible(false); //отключаем видимость курсора
+	window.setMouseCursorVisible(false); 
 
+
+
+
+	// loading content
 	Texture backtexture;
-	backtexture.loadFromFile("images/main_background.png");
+	backtexture.loadFromFile("resource/images/main_background.png");
 	Sprite back1;
 	back1.setTexture(backtexture);
 	back1.setTextureRect(IntRect(0, 0, 600, 400));
 	back1.setPosition(0, 0);
 
 	Music music;
-	if (!music.openFromFile("music/main_theme.ogg"))
+	if (!music.openFromFile("resource/music/main_theme.ogg"))
 		return;
 	music.play();
 	music.setLoop(true);
 
-
-	int vl;
-	std::ifstream file("volume.txt");
-	if (file.is_open()) { file >> vl; file.close(); }
-	music.setVolume(vl);
-
 	SoundBuffer buffer_jump;
-	if (!buffer_jump.loadFromFile("music/jump.wav"))
+	if (!buffer_jump.loadFromFile("resource/music/jump.wav"))
 		return;
 	Sound jump;
 	jump.setBuffer(buffer_jump);
 
 	SoundBuffer buffer_walk;
-	buffer_walk.loadFromFile("music/walking.wav");
+	buffer_walk.loadFromFile("resource/music/walking.wav");
 	Sound walk;
 	walk.setBuffer(buffer_walk);
 
 
 	Texture t;
-	t.loadFromFile("images/hero2.png");
+	t.loadFromFile("resource/images/hero2.png");
 	float currentFrame = 0;
 	PLAYER p(t);
 
@@ -46,58 +46,69 @@ void game(RenderWindow& window)
 	RectangleShape rectangle(Vector2f(32, 32));
 
 	Texture earth;
-	earth.loadFromFile("images/earth.png");
+	earth.loadFromFile("resource/images/earth.png");
 
 	Texture  earth_edge;
-	earth_edge.loadFromFile("images/earth_edge.png");
+	earth_edge.loadFromFile("resource/images/earth_edge.png");
 
 	Texture	box;
-	box.loadFromFile("images/box.png");
+	box.loadFromFile("resource/images/box.png");
 
 	Texture  earth_edge1;
-	earth_edge1.loadFromFile("images/earth_edge1.png");
+	earth_edge1.loadFromFile("resource/images/earth_edge1.png");
 
 	Texture  apple;
-	apple.loadFromFile("images/apple.png");
+	apple.loadFromFile("resource/images/apple.png");
 
 	Texture character;
-	character.loadFromFile("images/marshroom.png");
+	character.loadFromFile("resource/images/marshroom.png");
 	Sprite ch;
 	ch.setTexture(character);
 	ch.setTextureRect(IntRect(0, 0, 60, 60));
 
 	Texture cloud;
-	cloud.loadFromFile("images/talking1.png");
+	cloud.loadFromFile("resource/images/talking1.png");
 	Sprite cl;
 	cl.setTexture(cloud);
 	cl.setTextureRect(IntRect(0, 0, 60, 60));
 
 	Texture cloud1;
-	cloud1.loadFromFile("images/talking.png");
+	cloud1.loadFromFile("resource/images/talking.png");
 	Sprite cl1;
 	cl1.setTexture(cloud1);
 	cl1.setTextureRect(IntRect(0, 0, 60, 60));
 
 	Texture  nothing;
-	nothing.loadFromFile("images/nothing.png");
+	nothing.loadFromFile("resource/images/nothing.png");
 
 	Texture tree1;
-	tree1.loadFromFile("images/tree2.png");
+	tree1.loadFromFile("resource/images/tree2.png");
 	Sprite tr1;
 	tr1.setTexture(tree1);
 	tr1.setTextureRect(IntRect(0, 0, 65, 153));
 
 	Texture tree2;
-	tree2.loadFromFile("images/tree6.png");
+	tree2.loadFromFile("resource/images/tree6.png");
 	Sprite tr2;
 	tr2.setTexture(tree2);
 	tr2.setTextureRect(IntRect(0, 0, 96, 117));
 
 	Texture tree3;
-	tree3.loadFromFile("images/tree5.png");
+	tree3.loadFromFile("resource/images/tree5.png");
 	Sprite tr3;
 	tr3.setTexture(tree3);
 	tr3.setTextureRect(IntRect(0, 0, 111, 128));
+
+
+
+
+
+	// setting volume
+	int vl;
+	std::ifstream file("volume.txt");
+	if (file.is_open()) { file >> vl; file.close(); }
+	music.setVolume(vl);
+
 
 	while (window.isOpen())
 	{

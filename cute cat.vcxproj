@@ -72,9 +72,21 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>D:\my game\cute cat\include;D:\my game\cute cat\include;$(IncludePath)</IncludePath>
+    <SourcePath>D:\my game\cute cat\source;$(SourcePath)</SourcePath>
+    <ExecutablePath>$(ExecutablePath)</ExecutablePath>
+    <PublicIncludeDirectories>$(PublicIncludeDirectories)</PublicIncludeDirectories>
+    <AllProjectIncludesArePublic>false</AllProjectIncludesArePublic>
+    <ExternalIncludePath>D:\my game\cute cat\include;$(ExternalIncludePath)</ExternalIncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>D:\my game\cute cat\include;$(IncludePath)</IncludePath>
+    <SourcePath>D:\my game\cute cat\source;$(VC_SourcePath);</SourcePath>
+    <ExecutablePath>$(ExecutablePath)</ExecutablePath>
+    <PublicIncludeDirectories>$(PublicIncludeDirectories)</PublicIncludeDirectories>
+    <AllProjectIncludesArePublic>false</AllProjectIncludesArePublic>
+    <ExternalIncludePath>D:\my game\cute cat\include;$(ExternalIncludePath)</ExternalIncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -88,7 +100,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\SFML-2.6.1\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\my game\cute cat\include;C:\SFML-2.6.1\include</AdditionalIncludeDirectories>
+      <AdditionalUsingDirectories>%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -106,7 +119,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\SFML-2.6.1\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\my game\cute cat\include;C:\SFML-2.6.1\include</AdditionalIncludeDirectories>
+      <AdditionalUsingDirectories>%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -124,10 +138,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>C:\SFML-2.6.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>C:\SFML-2.6.1\lib;C:\SFML-2.6.1\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
+      <AdditionalDependencies>sfml-graphics-d.lib;sfml-window-d.lib;sfml-audio-d.lib;sfml-system-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -138,30 +156,32 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>C:\SFML-2.6.1\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>C:\SFML-2.6.1\lib;</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Game.cpp" />
-    <ClCompile Include="Internal_menu.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="Map.cpp" />
-    <ClCompile Include="Menu.cpp" />
-    <ClCompile Include="Player.cpp" />
-    <ClCompile Include="settings.cpp" />
+    <ClCompile Include="source\Game.cpp" />
+    <ClCompile Include="source\Internal_menu.cpp" />
+    <ClCompile Include="source\main.cpp" />
+    <ClCompile Include="source\Map.cpp" />
+    <ClCompile Include="source\Menu.cpp" />
+    <ClCompile Include="source\Player.cpp" />
+    <ClCompile Include="source\settings.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Game.h" />
-    <ClInclude Include="Internal_menu.h" />
-    <ClInclude Include="Map.h" />
-    <ClInclude Include="Menu.h" />
-    <ClInclude Include="Player.h" />
-    <ClInclude Include="settings.h" />
+    <ClInclude Include="include\Game.h" />
+    <ClInclude Include="include\Internal_menu.h" />
+    <ClInclude Include="include\Map.h" />
+    <ClInclude Include="include\Menu.h" />
+    <ClInclude Include="include\Player.h" />
+    <ClInclude Include="include\settings.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

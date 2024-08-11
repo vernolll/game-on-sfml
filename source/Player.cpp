@@ -11,6 +11,7 @@ PLAYER::PLAYER(Texture& image) {
     currentFrame = 0;
 }
 
+
 void PLAYER::update(float time) {
     rect.left += dx * time;
     Collision(0);

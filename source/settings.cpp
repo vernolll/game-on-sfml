@@ -4,7 +4,7 @@ using namespace sf;
 
 int setting(RenderWindow& window, Music& music) 
 {
-	//регул€ци€ громкости
+	// setting volume
 	int vl;
 	std::ifstream file("volume.txt");
 	if (file.is_open()) { file >> vl; file.close(); }
@@ -14,7 +14,7 @@ int setting(RenderWindow& window, Music& music)
 	music.setLoop(true);
 
 	SoundBuffer button;
-	if (!button.loadFromFile("music/button.wav"))
+	if (!button.loadFromFile("resource/music/button.wav"))
 		return 10;
 	Sound click;
 	click.setBuffer(button);
@@ -38,7 +38,7 @@ int setting(RenderWindow& window, Music& music)
 
 	window.clear();
 	Texture Background;
-	Background.loadFromFile("images/background4.png");
+	Background.loadFromFile("resource/images/menu.png");
 	Sprite background(Background);
 
 	RectangleShape esc(Vector2f(15, 15));
@@ -154,6 +154,4 @@ int setting(RenderWindow& window, Music& music)
 		window.draw(rus);
 		window.display();
 	}
-
-	// ораганзовать перевод на русский
 }
