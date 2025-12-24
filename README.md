@@ -13,3 +13,8 @@ If there are any suggestions for the development of the project, I am ready to d
 
 ## **Program structure**
 My program is divided into classes thematically. The Game class is responsible for the game itself and its plot, drawing game textures. The Internal_menu class is responsible for in-game settings. The Map class contains a map of the game. The Menu class implements the main menu that we see when starting the game. The Player class is responsible for loading the character, his interaction with the world. The settings class is the class responsible for setting up the game from the main menu.
+
+## **Preview**
+![Menu](resource/menu.png)
+![Settings](resource/settings.png)
+![Gameplay](resource/gameplay.png)
